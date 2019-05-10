@@ -19,6 +19,9 @@ router.get('/', async (req, res) => {
     }
 })
 
+
+// Read - Retrieve post by id
+
 router.get('/:id', async (req, res) => {
 
     const  { id } = req.params;
@@ -37,8 +40,31 @@ router.get('/:id', async (req, res) => {
             error: "The posts info could not be retrieved."
          })
     }
+});
 
+
+// Create - Add a post to db
+
+router.post('/', async (req, res) => {
+    const newPost = req.body;
+    try{
+    if(!newPost.title || !newPost.contents) {
+        res.status(400).json({ errorMessage: "Please provide title and contents for the post."  })
+    } else {
+        const post = await Tests.insert(req.body);
+        res.status(201).json(post);
+    }
+} catch(err) {
+    res.status(500).json({
+        error: "There was an error while saving the post to the database" 
+     })
+}
 })
+
+
+
+
+
 
 
 
