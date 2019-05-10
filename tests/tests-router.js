@@ -83,6 +83,36 @@ router.delete('/:id', async (req, res) => {
     }
 })
 
+// Update - Update a post
+
+router.put('/:id', async (req, res) => {
+    const { id } = req.params;
+    const changes = req.body;
+
+    try {
+        const post = await Tests.update(id, changes);
+
+        if (!changes.title || !changes.contents) {
+            res.status(400).json({
+                errorMessage: "Please provide title and contents for the post."
+            })
+        }
+        else if(post) {
+            res.status(200).json(post);
+        } 
+        else {
+           res.status(404).json({
+               message: "The post with the specified ID could not be found."
+           }) 
+        }
+   
+
+    } catch(err) {
+        res.status(500).json({
+            error: "The post info could not be modified"
+        })
+    }
+})
 
 
 
